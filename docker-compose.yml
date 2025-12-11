@@ -1,14 +1,22 @@
 version: "3.9"
 
 services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: python_web_app
+  converter:
+    build: ./converter
+    container_name: md_converter
+    volumes:
+      - ./conteudo:/app/conteudo
+      - ./html:/app/html
+      - ./logs:/app/logs
+    restart: always
+    user: "${UID}:${GID}" 
+
+  server:
+    build: ./server
+    container_name: html_server
     ports:
-      - "8000:8000"
+      - "8080:8080"
     volumes:
       - ./html:/app/html
-      - ./:/app
     restart: always
+    user: "${UID}:${GID}"
